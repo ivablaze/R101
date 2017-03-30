@@ -153,10 +153,67 @@ emp.newdata <- data.frame(
 emp.finaldata <- rbind(emp.data, emp.newdata)
 print(emp.finaldata)
 
+getwd()
+data <- read.csv("output.csv")
+pEc <- ggplot(data, aes(Percent.of.15plus.with.bank.account, SEDA.Current.level))
+(pEc <- pEc + geom_point(aes(color = Region)) + scale_color_brewer(palette = "Set1"))
 
+pEc2 <- ggplot(data, aes(Percent.of.15plus.with.bank.account, SEDA.Current.level))
+(pEc2 <- pEc2 + geom_point(aes(color = Region)))
 
+library(gridExtra)
+grid.arrange(pEc, pEc2, nrow = 2)
 
+?scale_color_brewer
+pEc
+data$Region <- as.character(data$Region)
+data$Region <- factor(data$Region,
+                      levels = c("Europe", "Asia", "Oceania",
+                                 "North America",
+                                 "Latin America & the Caribbean",
+                                 "Middle East & North Africa",
+                                 "Sub-Saharan Africa"),
+                      labels = c("Europe", "Asia", "Oceania",
+                                 "North America",
+                                 "Latin America & \n the Caribbean",
+                                 "Middle East & \n North Africa",
+                                 "Sub-Saharan \n Africa"))
+install.packages("ggplot2")
+library(ggplot2)
+pEc <- ggplot(data, aes(Percent.of.15plus.with.bank.account, SEDA.Current.level))
+pEc + geom_point(aes(color = Region))
 
+pEc <- pEc + geom_smooth(method = "lm", se = FALSE, col = "red", size = 1)
+?geom_smooth
 
+(pEc <- pEc + geom_point(aes(fill = Region), color = "black", shape = 21, size =4))
+
+?coord_fixed
+(pEc <- pEc + coord_fixed(ratio = 0.5))
+
+colors <-  c("#28AADC","#F2583F", "#76C0C1","#24576D",
+             "#248E84","#DCC3AA", "#96503F")
+(pEc6 <- pEc + scale_fill_manual(name = "",
+                                 values = colors))
+
+(pEc <- pEc +
+    scale_x_continuous(name = "% of people aged 15+ with bank account, 2014",
+                       limits = c(0, 100),
+                       breaks = seq(0, 100, by = 20)) +
+    scale_y_continuous(name = "SEDA Score, 100-maximum",
+                       limits = c(0, 100),
+                       breaks = seq(0, 100, by = 20)) +
+    ggtitle("Laughing all the way to the bank \n Well-being amd financial inclusion \n 2014-15"))
+
+library(ggthemes)
+pEc0 <- pEc
+pEc <- pEc + theme_economist_white(gray_bg=FALSE)
+
+pEc <- pEc + coord_fixed(0.4) +
+  theme(text = element_text(color = "grey37", size = 15),
+        legend.position = c(0.45, 1.1), # position the legend in the upper left
+        legend.direction = "horizontal",
+        legend.justification = 0.1, # anchor point for legend.position.
+library(grid)
 
 
